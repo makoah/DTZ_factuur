@@ -25,15 +25,20 @@ export const companyInfo = {
   },
   branding: {
     logo: {
+      main: '/DTZlogo2.png',
       original: '/Original Logo.png',
       transparent: '/Transparent Logo.png',
       grayscale: '/Grayscale Transparent.png',
       symbol: '/Original Logo Symbol.png'
     },
     colors: {
-      primary: '#004B87', // DTZ Blue (estimated)
-      secondary: '#00A651', // DTZ Green (estimated)
-      accent: '#FF6B35' // DTZ Orange (estimated)
+      primary: '#FF7F7F', // DTZ Coral/Salmon - from logo
+      secondary: '#1A3D5C', // DTZ Navy Blue - from logo background
+      accent: '#FF9999', // Lighter coral for accents
+      background: '#F8FAFB', // Light background
+      foreground: '#1A3D5C', // Text color (navy)
+      muted: '#6B7280', // Muted text
+      border: '#E5E7EB' // Border color
     }
   }
 } as const;
