@@ -1,5 +1,5 @@
 import Airtable from 'airtable';
-import type { Client, TimeEntry, Invoice, CompanyInfo } from '@/types';
+import type { Client, TimeEntry, Invoice } from '@/types';
 
 const base = new Airtable({
   apiKey: process.env.AIRTABLE_API_KEY,
@@ -9,7 +9,6 @@ export const tables = {
   clients: base('Clients'),
   timeEntries: base('TimeEntries'),
   invoices: base('Invoices'),
-  companyInfo: base('CompanyInfo'),
 };
 
 export async function getClients(): Promise<Client[]> {

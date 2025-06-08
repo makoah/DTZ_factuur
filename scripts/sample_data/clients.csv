@@ -1,0 +1,11 @@
+Name,Address,Email,PGB_Rate,Status,Created_Date
+"Jan de Vries","Klantenstraat 123
+1234 AB Amsterdam",jan.devries@email.nl,35.50,Active,2024-01-15
+"Maria Jansen","Begeleiderslaan 456
+5678 CD Utrecht",maria.jansen@gmail.com,42.00,Active,2024-01-20
+"Piet van der Berg","Zorgstraat 789
+9012 EF Rotterdam",piet.vandenberg@hotmail.com,38.75,Active,2024-02-01
+"Anna Koopmans","Hulpweg 321
+3456 GH Den Haag",anna.koopmans@outlook.com,40.25,Inactive,2024-01-10
+"Henk Bakker","Ondersteuningsplein 654
+7890 IJ Eindhoven",henk.bakker@live.nl,36.00,Active,2024-02-15

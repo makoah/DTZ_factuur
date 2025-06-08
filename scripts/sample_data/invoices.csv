@@ -1,0 +1,12 @@
+Client_Name,Month,Year,Total_Hours,Total_Amount,Status,PDF_URL,Created_Date
+"Jan de Vries",Jan,2024,16.5,585.75,Paid,,2024-02-01
+"Jan de Vries",Feb,2024,18.0,639.00,Paid,,2024-03-01
+"Jan de Vries",Mar,2024,14.5,514.75,Sent,,2024-04-01
+"Maria Jansen",Jan,2024,12.0,504.00,Paid,,2024-02-01
+"Maria Jansen",Feb,2024,15.5,651.00,Paid,,2024-03-01
+"Maria Jansen",Mar,2024,13.0,546.00,Draft,,2024-04-01
+"Piet van der Berg",Jan,2024,20.0,775.00,Paid,,2024-02-01
+"Piet van der Berg",Feb,2024,17.5,678.13,Paid,,2024-03-01
+"Piet van der Berg",Mar,2024,11.0,426.25,Draft,,2024-04-01
+"Henk Bakker",Feb,2024,8.0,288.00,Paid,,2024-03-01
+"Henk Bakker",Mar,2024,9.0,324.00,Sent,,2024-04-01

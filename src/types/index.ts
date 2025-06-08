@@ -29,19 +29,10 @@ export interface Invoice {
   createdDate: Date;
 }
 
-export interface CompanyInfo {
-  id: string;
-  companyName: string;
-  address: string;
-  btwNumber: string;
-  bankAccount: string;
-  email: string;
-  phone: string;
-}
+// CompanyInfo is now in src/lib/company-config.ts as a static config
 
 export interface InvoiceData {
   invoice: Invoice;
   client: Client;
-  company: CompanyInfo;
   timeEntries: TimeEntry[];
 }
