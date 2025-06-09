@@ -6,6 +6,7 @@ import { ArrowLeft, Edit, Mail, MapPin, Phone, Clock, FileText } from "lucide-re
 import Link from "next/link"
 import { companyInfo } from "@/lib/company-config"
 import { useTheme } from "@/lib/theme-context"
+import { useThemeColors } from "@/lib/theme-colors"
 import { useState, useEffect } from "react"
 import { fetchClient } from "@/lib/api"
 import type { Client } from "@/types"
@@ -36,6 +37,7 @@ const recentInvoices = [
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
   const { isDark } = useTheme()
+  const colors = useThemeColors(isDark)
   const [client, setClient] = useState<Client | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -109,10 +111,10 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.secondary }}>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: colors.text.primary }}>
               {client.name}
             </h1>
-            <p style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+            <p style={{ color: colors.text.muted }}>
               Cliënt ID: {params.id}
             </p>
           </div>
@@ -154,51 +156,51 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-3">
-                <Mail className="h-4 w-4" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }} />
-                <span className="text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                <Mail className="h-4 w-4" style={{ color: colors.text.accent }} />
+                <span className="text-sm" style={{ color: colors.text.primary }}>
                   {client.email}
                 </span>
               </div>
               
               <div className="flex items-center space-x-3">
-                <Phone className="h-4 w-4" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }} />
-                <span className="text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                <Phone className="h-4 w-4" style={{ color: colors.text.accent }} />
+                <span className="text-sm" style={{ color: colors.text.primary }}>
                   N/A
                 </span>
               </div>
               
               <div className="flex items-start space-x-3">
-                <MapPin className="h-4 w-4 mt-0.5" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }} />
-                <span className="text-sm whitespace-pre-line" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                <MapPin className="h-4 w-4 mt-0.5" style={{ color: colors.text.accent }} />
+                <span className="text-sm whitespace-pre-line" style={{ color: colors.text.primary }}>
                   {client.address}
                 </span>
               </div>
 
-              <div className="pt-4" style={{ borderTop: `1px solid ${companyInfo.branding.colors.border}` }}>
+              <div className="pt-4" style={{ borderTop: `1px solid ${colors.border}` }}>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                  <span className="text-sm" style={{ color: colors.text.muted }}>
                     PGB Uurtarief:
                   </span>
-                  <span className="font-bold" style={{ color: companyInfo.branding.colors.primary }}>
+                  <span className="font-bold" style={{ color: colors.text.accent }}>
                     €{client.pgbRate.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                  <span className="text-sm" style={{ color: colors.text.muted }}>
                     Cliënt sinds:
                   </span>
-                  <span className="text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                  <span className="text-sm" style={{ color: colors.text.primary }}>
                     {new Date(client.createdDate).toLocaleDateString('nl-NL')}
                   </span>
                 </div>
               </div>
 
               {mockClientData.notes && (
-                <div className="pt-4" style={{ borderTop: `1px solid ${companyInfo.branding.colors.border}` }}>
-                  <h4 className="text-sm font-medium mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                <div className="pt-4" style={{ borderTop: `1px solid ${colors.border}` }}>
+                  <h4 className="text-sm font-medium mb-2" style={{ color: colors.text.primary }}>
                     Notities:
                   </h4>
-                  <p className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                  <p className="text-sm" style={{ color: colors.text.muted }}>
                     {mockClientData.notes}
                   </p>
                 </div>
@@ -229,20 +231,20 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 <div className="space-y-3">
                   {recentTimeEntries.map((entry, index) => (
                     <div key={index} className="flex items-center justify-between p-3 rounded-lg" 
-                         style={{ backgroundColor: isDark ? companyInfo.branding.colors.secondary + '20' : '#F9FAFB' }}>
+                         style={{ backgroundColor: colors.background.accent }}>
                       <div>
-                        <div className="font-medium text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                        <div className="font-medium text-sm" style={{ color: colors.text.primary }}>
                           {new Date(entry.date).toLocaleDateString('nl-NL')}
                         </div>
-                        <div className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                        <div className="text-sm" style={{ color: colors.text.muted }}>
                           {entry.notes}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-bold" style={{ color: companyInfo.branding.colors.primary }}>
+                        <div className="font-bold" style={{ color: colors.text.accent }}>
                           {entry.hours}h
                         </div>
-                        <div className="text-xs" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                        <div className="text-xs" style={{ color: colors.text.muted }}>
                           €{(entry.hours * client.pgbRate).toFixed(2)}
                         </div>
                       </div>
@@ -271,17 +273,17 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 <div className="space-y-3">
                   {recentInvoices.map((invoice, index) => (
                     <div key={index} className="flex items-center justify-between p-3 rounded-lg" 
-                         style={{ backgroundColor: isDark ? companyInfo.branding.colors.secondary + '20' : '#F9FAFB' }}>
+                         style={{ backgroundColor: colors.background.accent }}>
                       <div>
-                        <div className="font-medium text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                        <div className="font-medium text-sm" style={{ color: colors.text.primary }}>
                           {invoice.invoiceNumber}
                         </div>
-                        <div className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                        <div className="text-sm" style={{ color: colors.text.muted }}>
                           {invoice.month} {invoice.year}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-bold" style={{ color: companyInfo.branding.colors.primary }}>
+                        <div className="font-bold" style={{ color: colors.text.accent }}>
                           €{invoice.amount.toFixed(2)}
                         </div>
                         <span 
