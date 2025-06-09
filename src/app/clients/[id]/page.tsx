@@ -52,8 +52,11 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       } catch (err) {
         setError('Kon cliënt gegevens niet laden')
         console.error('Error loading client:', err)
-        // Use mock data as fallback
-        setClient(mockClientData)
+        // Use mock data as fallback with proper Date conversion
+        setClient({
+          ...mockClientData,
+          createdDate: new Date(mockClientData.createdDate)
+        })
       } finally {
         setLoading(false)
       }

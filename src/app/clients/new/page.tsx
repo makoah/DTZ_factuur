@@ -158,9 +158,8 @@ export default function NewClientPage() {
                     placeholder="Jan"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50"
                     style={{ 
-                      borderColor: error ? '#DC2626' : '#D1D5DB',
-                      '--tw-ring-color': companyInfo.branding.colors.primary 
-                    }}
+                      borderColor: error ? '#DC2626' : '#D1D5DB'
+                    } as React.CSSProperties}
                     required
                     disabled={loading}
                   />
@@ -178,9 +177,8 @@ export default function NewClientPage() {
                     placeholder="de Vries"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50"
                     style={{ 
-                      borderColor: error ? '#DC2626' : '#D1D5DB',
-                      '--tw-ring-color': companyInfo.branding.colors.primary 
-                    }}
+                      borderColor: error ? '#DC2626' : '#D1D5DB'
+                    } as React.CSSProperties}
                     required
                     disabled={loading}
                   />
@@ -242,9 +240,8 @@ export default function NewClientPage() {
                     placeholder="38.75"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50"
                     style={{ 
-                      borderColor: error ? '#DC2626' : '#D1D5DB',
-                      '--tw-ring-color': companyInfo.branding.colors.primary 
-                    }}
+                      borderColor: error ? '#DC2626' : '#D1D5DB'
+                    } as React.CSSProperties}
                     required
                     disabled={loading}
                   />
@@ -260,9 +257,8 @@ export default function NewClientPage() {
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50"
                     style={{ 
-                      borderColor: error ? '#DC2626' : '#D1D5DB',
-                      '--tw-ring-color': companyInfo.branding.colors.primary 
-                    }}
+                      borderColor: error ? '#DC2626' : '#D1D5DB'
+                    } as React.CSSProperties}
                     disabled={loading}
                   >
                     <option value="active">Actief</option>
