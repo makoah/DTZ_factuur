@@ -1,0 +1,92 @@
+import type { Client, TimeEntry } from '@/types'
+import type { ClientApiType, TimeEntryApiType } from '@/types/api'
+
+const API_BASE = '/api'
+
+export async function fetchClients(): Promise<Client[]> {
+  const response = await fetch(`${API_BASE}/clients`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch clients')
+  }
+  const data: ClientApiType[] = await response.json()
+  // Convert string dates back to Date objects
+  return data.map((client: ClientApiType) => ({
+    ...client,
+    createdDate: new Date(client.createdDate)
+  }))
+}
+
+export async function fetchClient(id: string): Promise<Client> {
+  const response = await fetch(`${API_BASE}/clients/${id}`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch client')
+  }
+  const data: ClientApiType = await response.json()
+  // Convert string date to Date object
+  return {
+    ...data,
+    createdDate: new Date(data.createdDate)
+  }
+}
+
+export async function createClientAPI(client: Omit<Client, 'id' | 'createdDate'>): Promise<Client> {
+  const response = await fetch(`${API_BASE}/clients`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(client),
+  })
+  
+  if (!response.ok) {
+    throw new Error('Failed to create client')
+  }
+  
+  const data: ClientApiType = await response.json()
+  // Convert string date back to Date object
+  return {
+    ...data,
+    createdDate: new Date(data.createdDate)
+  }
+}
+
+export async function fetchTimeEntries(): Promise<TimeEntry[]> {
+  const response = await fetch(`${API_BASE}/time-entries`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch time entries')
+  }
+  const data: TimeEntryApiType[] = await response.json()
+  // Convert string dates back to Date objects
+  return data.map((entry: TimeEntryApiType) => ({
+    ...entry,
+    date: new Date(entry.date),
+    createdDate: new Date(entry.createdDate)
+  }))
+}
+
+export async function createTimeEntryAPI(timeEntry: {
+  clientId: string
+  date: string
+  hours: number
+  notes?: string
+}): Promise<TimeEntry> {
+  const response = await fetch(`${API_BASE}/time-entries`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(timeEntry),
+  })
+  
+  if (!response.ok) {
+    throw new Error('Failed to create time entry')
+  }
+  
+  const data: TimeEntryApiType = await response.json()
+  // Convert string dates back to Date objects
+  return {
+    ...data,
+    date: new Date(data.date),
+    createdDate: new Date(data.createdDate)
+  }
+}
