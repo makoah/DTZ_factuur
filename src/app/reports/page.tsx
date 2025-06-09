@@ -1,7 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+'use client'
+
+import { ThemedCard as Card, ThemedCardContent as CardContent, ThemedCardDescription as CardDescription, ThemedCardHeader as CardHeader, ThemedCardTitle as CardTitle } from "@/components/ui/themed-card"
 import { Button } from "@/components/ui/button"
 import { BarChart3, TrendingUp, Download, Calendar, Euro, Clock } from "lucide-react"
 import { companyInfo } from "@/lib/company-config"
+import { useTheme } from "@/lib/theme-context"
 
 // Mock data - will be replaced with real calculations
 const reportData = {
@@ -32,16 +35,17 @@ const monthlyData = [
 ]
 
 export default function ReportsPage() {
+  const { isDark } = useTheme()
   const growth = ((reportData.thisMonth.totalRevenue - reportData.lastMonth.totalRevenue) / reportData.lastMonth.totalRevenue * 100).toFixed(1)
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: companyInfo.branding.colors.secondary }}>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.secondary }}>
             Rapporten
           </h1>
-          <p style={{ color: companyInfo.branding.colors.muted }}>
+          <p style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
             Overzicht van uren, omzet en prestaties
           </p>
         </div>

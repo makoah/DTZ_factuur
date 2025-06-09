@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ThemedCard as Card, ThemedCardContent as CardContent, ThemedCardDescription as CardDescription, ThemedCardHeader as CardHeader, ThemedCardTitle as CardTitle } from "@/components/ui/themed-card"
 import { Button } from "@/components/ui/button"
 import { Palette, Sun, Moon, Monitor, Save, Check } from "lucide-react"
 import { companyInfo } from "@/lib/company-config"
@@ -24,10 +24,10 @@ export default function SettingsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: companyInfo.branding.colors.secondary }}>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.secondary }}>
           Instellingen
         </h1>
-        <p style={{ color: companyInfo.branding.colors.muted }}>
+        <p style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
           Pas uw DTZ factuur tool aan naar uw voorkeuren
         </p>
       </div>

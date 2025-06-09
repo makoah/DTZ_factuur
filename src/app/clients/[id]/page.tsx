@@ -1,19 +1,25 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+'use client'
+
+import { ThemedCard as Card, ThemedCardContent as CardContent, ThemedCardHeader as CardHeader, ThemedCardTitle as CardTitle } from "@/components/ui/themed-card"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Edit, Mail, MapPin, Phone, Clock, Euro, FileText } from "lucide-react"
+import { ArrowLeft, Edit, Mail, MapPin, Phone, Clock, FileText } from "lucide-react"
 import Link from "next/link"
 import { companyInfo } from "@/lib/company-config"
+import { useTheme } from "@/lib/theme-context"
+import { useState, useEffect } from "react"
+import { fetchClient } from "@/lib/api"
+import type { Client } from "@/types"
+import { Loader2, AlertCircle } from "lucide-react"
 
-// This would normally come from Airtable based on the ID
-const mockClient = {
+// Mock data fallback
+const mockClientData = {
   id: "1",
   name: "Piet van der Berg",
   email: "piet.vandenberg@hotmail.com",
-  phone: "+31 6 12 34 56 78",
   address: "Zorgstraat 789\n9012 EF Rotterdam",
   pgbRate: 38.75,
-  status: "active",
-  createdDate: "2024-01-15",
+  status: "active" as const,
+  createdDate: "2024-01-15T00:00:00.000Z",
   notes: "Reguliere begeleiding bij dagbesteding en sociale activiteiten"
 }
 
@@ -29,6 +35,69 @@ const recentInvoices = [
 ]
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
+  const { isDark } = useTheme()
+  const [client, setClient] = useState<Client | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function loadClient() {
+      try {
+        setLoading(true)
+        setError(null)
+        const clientData = await fetchClient(params.id)
+        setClient(clientData)
+      } catch (err) {
+        setError('Kon cliënt gegevens niet laden')
+        console.error('Error loading client:', err)
+        // Use mock data as fallback
+        setClient(mockClientData)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadClient()
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin" style={{ color: companyInfo.branding.colors.primary }} />
+          <span className="ml-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+            Cliënt gegevens laden...
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !client) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Card>
+          <CardContent className="text-center py-12">
+            <AlertCircle className="h-12 w-12 mx-auto mb-4" style={{ color: companyInfo.branding.colors.primary }} />
+            <h3 className="text-lg font-medium mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+              Fout bij laden
+            </h3>
+            <p className="mb-4" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+              {error}
+            </p>
+            <Button onClick={() => window.location.reload()}>
+              Opnieuw proberen
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (!client) {
+    return null
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
@@ -40,10 +109,10 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ color: companyInfo.branding.colors.secondary }}>
-              {mockClient.name}
+            <h1 className="text-3xl font-bold mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.secondary }}>
+              {client.name}
             </h1>
-            <p style={{ color: companyInfo.branding.colors.muted }}>
+            <p style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
               Cliënt ID: {params.id}
             </p>
           </div>
@@ -67,70 +136,70 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         <div className="lg:col-span-1">
           <Card>
             <CardHeader>
-              <CardTitle style={{ color: companyInfo.branding.colors.secondary }}>
+              <CardTitle>
                 Cliënt Informatie
               </CardTitle>
               <div className="flex items-center space-x-2">
                 <span 
                   className="px-2 py-1 rounded-full text-xs font-medium text-white"
                   style={{ 
-                    backgroundColor: mockClient.status === 'active' 
+                    backgroundColor: client.status === 'active' 
                       ? companyInfo.branding.colors.primary 
                       : '#6B7280'
                   }}
                 >
-                  {mockClient.status === 'active' ? 'Actief' : 'Inactief'}
+                  {client.status === 'active' ? 'Actief' : 'Inactief'}
                 </span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-3">
-                <Mail className="h-4 w-4" style={{ color: companyInfo.branding.colors.muted }} />
-                <span className="text-sm" style={{ color: companyInfo.branding.colors.foreground }}>
-                  {mockClient.email}
+                <Mail className="h-4 w-4" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }} />
+                <span className="text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                  {client.email}
                 </span>
               </div>
               
               <div className="flex items-center space-x-3">
-                <Phone className="h-4 w-4" style={{ color: companyInfo.branding.colors.muted }} />
-                <span className="text-sm" style={{ color: companyInfo.branding.colors.foreground }}>
-                  {mockClient.phone}
+                <Phone className="h-4 w-4" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }} />
+                <span className="text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                  N/A
                 </span>
               </div>
               
               <div className="flex items-start space-x-3">
-                <MapPin className="h-4 w-4 mt-0.5" style={{ color: companyInfo.branding.colors.muted }} />
-                <span className="text-sm whitespace-pre-line" style={{ color: companyInfo.branding.colors.foreground }}>
-                  {mockClient.address}
+                <MapPin className="h-4 w-4 mt-0.5" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }} />
+                <span className="text-sm whitespace-pre-line" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                  {client.address}
                 </span>
               </div>
 
-              <div className="pt-4 border-t">
+              <div className="pt-4" style={{ borderTop: `1px solid ${companyInfo.branding.colors.border}` }}>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm" style={{ color: companyInfo.branding.colors.muted }}>
+                  <span className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
                     PGB Uurtarief:
                   </span>
                   <span className="font-bold" style={{ color: companyInfo.branding.colors.primary }}>
-                    €{mockClient.pgbRate.toFixed(2)}
+                    €{client.pgbRate.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm" style={{ color: companyInfo.branding.colors.muted }}>
+                  <span className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
                     Cliënt sinds:
                   </span>
-                  <span className="text-sm" style={{ color: companyInfo.branding.colors.foreground }}>
-                    {new Date(mockClient.createdDate).toLocaleDateString('nl-NL')}
+                  <span className="text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
+                    {new Date(client.createdDate).toLocaleDateString('nl-NL')}
                   </span>
                 </div>
               </div>
 
-              {mockClient.notes && (
-                <div className="pt-4 border-t">
-                  <h4 className="text-sm font-medium mb-2" style={{ color: companyInfo.branding.colors.foreground }}>
+              {mockClientData.notes && (
+                <div className="pt-4" style={{ borderTop: `1px solid ${companyInfo.branding.colors.border}` }}>
+                  <h4 className="text-sm font-medium mb-2" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
                     Notities:
                   </h4>
-                  <p className="text-sm" style={{ color: companyInfo.branding.colors.muted }}>
-                    {mockClient.notes}
+                  <p className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                    {mockClientData.notes}
                   </p>
                 </div>
               )}
@@ -145,7 +214,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span style={{ color: companyInfo.branding.colors.secondary }}>
+                  <span>
                     Recente Tijd Registraties
                   </span>
                   <Link href={`/time-entries/new?client=${params.id}`}>
@@ -159,12 +228,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               <CardContent>
                 <div className="space-y-3">
                   {recentTimeEntries.map((entry, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg" 
+                         style={{ backgroundColor: isDark ? companyInfo.branding.colors.secondary + '20' : '#F9FAFB' }}>
                       <div>
-                        <div className="font-medium text-sm" style={{ color: companyInfo.branding.colors.foreground }}>
+                        <div className="font-medium text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
                           {new Date(entry.date).toLocaleDateString('nl-NL')}
                         </div>
-                        <div className="text-sm" style={{ color: companyInfo.branding.colors.muted }}>
+                        <div className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
                           {entry.notes}
                         </div>
                       </div>
@@ -172,8 +242,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                         <div className="font-bold" style={{ color: companyInfo.branding.colors.primary }}>
                           {entry.hours}h
                         </div>
-                        <div className="text-xs" style={{ color: companyInfo.branding.colors.muted }}>
-                          €{(entry.hours * mockClient.pgbRate).toFixed(2)}
+                        <div className="text-xs" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
+                          €{(entry.hours * client.pgbRate).toFixed(2)}
                         </div>
                       </div>
                     </div>
@@ -186,7 +256,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span style={{ color: companyInfo.branding.colors.secondary }}>
+                  <span>
                     Factuur Geschiedenis
                   </span>
                   <Link href={`/invoices/new?client=${params.id}`}>
@@ -200,12 +270,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               <CardContent>
                 <div className="space-y-3">
                   {recentInvoices.map((invoice, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg" 
+                         style={{ backgroundColor: isDark ? companyInfo.branding.colors.secondary + '20' : '#F9FAFB' }}>
                       <div>
-                        <div className="font-medium text-sm" style={{ color: companyInfo.branding.colors.foreground }}>
+                        <div className="font-medium text-sm" style={{ color: isDark ? 'white' : companyInfo.branding.colors.foreground }}>
                           {invoice.invoiceNumber}
                         </div>
-                        <div className="text-sm" style={{ color: companyInfo.branding.colors.muted }}>
+                        <div className="text-sm" style={{ color: isDark ? companyInfo.branding.colors.primary : companyInfo.branding.colors.muted }}>
                           {invoice.month} {invoice.year}
                         </div>
                       </div>

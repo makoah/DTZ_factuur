@@ -1,10 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+'use client'
+
+import { ThemedCard as Card, ThemedCardContent as CardContent, ThemedCardDescription as CardDescription, ThemedCardHeader as CardHeader, ThemedCardTitle as CardTitle } from "@/components/ui/themed-card"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Save, Calculator } from "lucide-react"
 import Link from "next/link"
 import { companyInfo } from "@/lib/company-config"
+import { useTheme } from "@/lib/theme-context"
 
 export default function NewInvoicePage() {
+  const { isDark } = useTheme()
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center mb-8">
